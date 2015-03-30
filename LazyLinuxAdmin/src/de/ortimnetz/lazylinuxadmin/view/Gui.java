@@ -31,11 +31,11 @@ public class Gui extends JFrame {
 	private Gui(){
 		
 		menubar = new JMenuBar();
-		menuFile = new JMenu("Datei");
+		menuFile = new JMenu("File");
 		menuHelp = new JMenu("?");
 		menuItemStart = new JMenuItem("Start");
-		menuItemConfig = new JMenuItem("Konfiguration");
-		menuItemExit = new JMenuItem("Beenden");
+		menuItemConfig = new JMenuItem("Configuration");
+		menuItemExit = new JMenuItem("Exit");
 		menuItemVersion = new JMenuItem("Version");
 		
 
@@ -53,7 +53,7 @@ public class Gui extends JFrame {
 		this.setJMenuBar(menubar);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH); 
-		this.setTitle("Lazy Linux Admin - Server Verwaltungstool");
+		this.setTitle("Lazy Linux Admin - Server Management Tool");
 		this.setMinimumSize(new Dimension(800, 600));
 		this.setVisible(true);
 
