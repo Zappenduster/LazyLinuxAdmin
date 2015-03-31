@@ -1,12 +1,19 @@
 package de.ortimnetz.lazylinuxadmin.view;
 
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 
+
+
+
+
+
+
+import java.util.Enumeration;
 
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -14,12 +21,24 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
 
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.TableColumnModelListener;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
+
 import de.ortimnetz.lazylinuxadmin.controller.Controller;
+import de.ortimnetz.lazylinuxadmin.model.MyTableModel;
 
 
 public class Gui extends JFrame {
 	
 	private static Gui instance;
+	private BorderLayout borderlayout;
+	private JScrollPane tablepanel;
 	private JMenuBar menubar;
 	private JMenu menuFile;
 	private JMenu menuHelp;
@@ -27,9 +46,14 @@ public class Gui extends JFrame {
 	private JMenuItem menuItemConfig;
 	private JMenuItem menuItemExit;
 	private JMenuItem menuItemVersion;
+	private JTable table;
+	private MyTableModel dm;
 	
 	private Gui(){
-				
+		borderlayout = new BorderLayout();
+	
+
+		
 		menubar = new JMenuBar();
 		menuFile = new JMenu("File");
 		menuHelp = new JMenu("Help");
@@ -37,8 +61,12 @@ public class Gui extends JFrame {
 		menuItemConfig = new JMenuItem("Configuration");
 		menuItemExit = new JMenuItem("Exit");
 		menuItemVersion = new JMenuItem("Version");
+		dm=new MyTableModel();
 		
-
+		table = new JTable(dm);
+	
+		tablepanel = new JScrollPane(table);
+		this.add(tablepanel);
 		
 		menubar.add(menuFile);
 		menubar.add(menuHelp);
@@ -73,8 +101,6 @@ public class Gui extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
-				Controller.getInstance().loadConfig();
-				
 				GuiConfig config = new GuiConfig();
 				
 			}
@@ -108,6 +134,14 @@ public class Gui extends JFrame {
 		
 		return instance;
 	}
+
+	public void createTable(int numRows, int numColumns){
+		JTable table = new JTable(numRows, numColumns);
+		this.add(table);
+		this.validate();
+		this.repaint();
+	}
+
 
 
 	

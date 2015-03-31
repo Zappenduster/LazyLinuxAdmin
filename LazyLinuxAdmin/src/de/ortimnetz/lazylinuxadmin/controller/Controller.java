@@ -1,6 +1,7 @@
 package de.ortimnetz.lazylinuxadmin.controller;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -16,7 +17,9 @@ import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 
 import de.ortimnetz.lazylinuxadmin.command.Command;
+import de.ortimnetz.lazylinuxadmin.command.CommandDistUpgrade;
 import de.ortimnetz.lazylinuxadmin.command.CommandUpdate;
+import de.ortimnetz.lazylinuxadmin.command.CommandUpgrade;
 import de.ortimnetz.lazylinuxadmin.model.Config;
 import de.ortimnetz.lazylinuxadmin.model.Host;
 import de.ortimnetz.lazylinuxadmin.view.Gui;
@@ -28,12 +31,12 @@ public class Controller {
 	private static Controller instance;
 	private CopyOnWriteArrayList<Host> hosts;
 	private Config config;
-	
+
 		
 	private Controller(){
 		Gui.getInstance();
 		hosts = new CopyOnWriteArrayList<Host>();
-		config = Config.getInstance();
+		loadConfig();
 		
 	}
 	
@@ -98,6 +101,7 @@ public class Controller {
 					config = Config.getInstance();
 					createHosts();
 					createSessions();
+
 					startCommands();
 				} catch (NullPointerException e) {
 					System.out.println("Configuration is not valid.");
@@ -158,39 +162,51 @@ public class Controller {
 	}
 	
 	public void loadConfig(){
-		FileInputStream fis;
-		try {
-			fis = new FileInputStream("config.ser");		
-			ObjectInputStream ois = new ObjectInputStream(fis);
-			Config.setInstance((Config) ois.readObject());
-			ois.close();
-			fis.close();
-		} catch (FileNotFoundException e) {
-			System.out.println("Start with blank config.");
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		
+		File file = new File("config.ser");
+		
+		if(file.exists()){
+			FileInputStream fis;
+			try {
+				fis = new FileInputStream("config.ser");		
+				ObjectInputStream ois = new ObjectInputStream(fis);
+				Config.setInstance((Config) ois.readObject());
+				ois.close();
+				fis.close();
+			} catch (FileNotFoundException e) {
+				System.out.println("Config error.");
+			} catch (IOException e) {
+				System.out.println("Config error.");
+			} catch (ClassNotFoundException e) {
+				System.out.println("Config error.");
+			}
+		} else {
+			this.config = Config.getInstance();
 		}
+		
+
 	}
 	
 	private void startCommands(){
-		for(Host host : hosts){
+		for(final Host host : hosts){
 			Thread thread = new Thread(new Runnable() {
 				
 				@Override
 				public void run() {
-					ArrayList<Command> commands = new ArrayList<Command>();
+					ArrayList<Command> commands = host.getCommands();
+					Session session = host.getSession();
 					
-					Command update = new CommandUpdate(host.getSession());
+					Command update = new CommandUpdate(session);
 					commands.add(update);
+					Command upgrade = new CommandUpgrade(session);
+					commands.add(upgrade);
+					Command distUpgrade = new CommandDistUpgrade(session);
+					commands.add(distUpgrade);
 					
 					for(Command command : commands){
 						command.execute();
 						if(!command.isSuccessful()){
-							System.out.println("Fehler");
+							System.out.println("Error");
 						}
 					}
 					
@@ -202,6 +218,14 @@ public class Controller {
 		}
 	}
 	
+//	private void paintTable(){
+//		
+//		int numRows = hosts.size();
+//		int numColumns = commands.size();
+//		Gui.getInstance().createTable(numRows, numColumns);
+//
+//		
+//	}
 	
 	
 }

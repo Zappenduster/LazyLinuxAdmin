@@ -1,5 +1,6 @@
 package de.ortimnetz.lazylinuxadmin.command;
 
+
 import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.Session;
 
@@ -8,13 +9,12 @@ public abstract class Command implements ICommand {
 	
 	private int exitcode;
 	private boolean successful;
-	private Session session;
-	private String command;
+	protected Session session;
+	protected String command;
 	
-	public Command(Session session){
+	public Command(){
 		successful = false;
 		exitcode = -1;
-		this.session = session;
 	}
 	
 	@Override
@@ -36,13 +36,14 @@ public abstract class Command implements ICommand {
 			}	
 						
 			channel.disconnect();
-			
-			System.out.println(session.getHost() + command + ": " + channel.getExitStatus());
+			setExitcode(channel.getExitStatus());
+			System.out.println(session.getHost() + " " + command + ": " + channel.getExitStatus());
 		} catch (Exception e) {
 			
 		}
-		
 	}
+		
+	
 
 	public int getExitcode() {
 		return exitcode;
@@ -70,6 +71,14 @@ public abstract class Command implements ICommand {
 
 	public void setSession(Session session) {
 		this.session = session;
+	}
+
+	public String getCommand() {
+		return command;
+	}
+
+	public void setCommand(String command) {
+		this.command = command;
 	}
 	
 	
