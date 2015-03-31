@@ -14,6 +14,7 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JTable;
 
 
 public class Gui extends JFrame {
@@ -26,13 +27,15 @@ public class Gui extends JFrame {
 	private JMenuItem menuItemConfig;
 	private JMenuItem menuItemExit;
 	private JMenuItem menuItemVersion;
-	
+	private JTable table;
 	
 	private Gui(){
 		
+		table = new JTable(1, 10);
+		
 		menubar = new JMenuBar();
 		menuFile = new JMenu("File");
-		menuHelp = new JMenu("?");
+		menuHelp = new JMenu("Help");
 		menuItemStart = new JMenuItem("Start");
 		menuItemConfig = new JMenuItem("Configuration");
 		menuItemExit = new JMenuItem("Exit");
@@ -51,6 +54,7 @@ public class Gui extends JFrame {
 		
 
 		this.setJMenuBar(menubar);
+		this.add(table);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH); 
 		this.setTitle("Lazy Linux Admin - Server Management Tool");
@@ -83,6 +87,15 @@ public class Gui extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				System.exit(0);
+				
+			}
+		});
+		
+		menuItemStart.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
 				
 			}
 		});

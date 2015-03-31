@@ -74,6 +74,10 @@ public class Config {
 	public void setPort(int port) {
 		this.port = port;
 	}
+
+	public static void setInstance(Config instance) {
+		Config.instance = instance;
+	}
 	
 	
 	

@@ -1,10 +1,21 @@
 package de.ortimnetz.lazylinuxadmin.view;
 
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.security.auth.login.AppConfigurationEntry;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
+import javax.swing.border.Border;
+
+import de.ortimnetz.lazylinuxadmin.model.Config;
 
 
 public class GuiConfig extends JFrame {
@@ -15,9 +26,10 @@ public class GuiConfig extends JFrame {
 	private JPasswordField pwdKeyPassword;
 	private JTextField txtPort;
 	private JLabel lblPassword;
+	private Config config;
 
 	public GuiConfig(){
-		
+		this.config = Config.getInstance();
 		this.setTitle("Configuration");
 		this.setDefaultCloseOperation(this.DISPOSE_ON_CLOSE);
 		this.setSize(400, 260);
@@ -98,11 +110,100 @@ public class GuiConfig extends JFrame {
 		getContentPane().add(btnPickHostFile);
 		this.setVisible(true);
 		
+		btnPickKeyFile.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JFileChooser fc = new JFileChooser();
+				fc.showOpenDialog(null);
+				txtKeyFile.setText(fc.getSelectedFile().toString());
+				
+				
+			}
+		});
 		
+		btnExit.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+				
+			}
+		});
 		
+		btnPickHostFile.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JFileChooser fc = new JFileChooser();
+				fc.showOpenDialog(null);
+				txtHostFile.setText(fc.getSelectedFile().toString());
+				
+			}
+		});
 		
+
 		
-		
+		btnSave.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+
+				
+				// User textfield is being checked
+				if(txtUser.getText().equalsIgnoreCase("")){
+					txtUser.setBackground(Color.RED);
+					System.out.println("Please fill out a user.");
+
+				} else {
+					config.setUser(txtUser.getText());
+					System.out.println("User has been written to config.");
+				}
+				
+				// Port textfield is being checked
+				if(txtPort.getText().equalsIgnoreCase("")){
+					txtPort.setBackground(Color.RED);
+					System.out.println("Please fill out the port.");
+
+				} else {
+					config.setPort(Integer.parseInt(txtPort.getText().toString()));
+					System.out.println("Port has been written to config.");
+				}
+				
+				config.setPass(pwdPassword.getText().toString());
+
+				if(txtKeyFile.getText().equalsIgnoreCase("")){
+					txtKeyFile.setBackground(Color.RED);
+					System.out.println("Please choose a key file.");
+
+				} else {
+					config.setKeyfile(txtKeyFile.getText().toString());
+					System.out.println("Key file has been written to config.");
+				}
+				
+				config.setKeypass(pwdKeyPassword.getText().toString());
+				
+				if(txtHostFile.getText().equalsIgnoreCase("")){
+					txtHostFile.setBackground(Color.RED);
+					System.out.println("Please choose a host file.");
+	
+				} else {
+					config.setHostsfile(txtHostFile.getText().toString());
+					System.out.println("Host file has been written to config.");
+				}
+				
+
+					Config.setInstance(config);
+					System.out.println("Config file has been written.");
+			
+
+				
+			}
+		});
 		
 	}
+	
+
+	
 }
