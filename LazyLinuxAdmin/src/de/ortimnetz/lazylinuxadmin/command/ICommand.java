@@ -1,4 +1,4 @@
-package de.ortimnetz.lazylinuxadmin.model;
+package de.ortimnetz.lazylinuxadmin.command;
 
 public interface ICommand {
 

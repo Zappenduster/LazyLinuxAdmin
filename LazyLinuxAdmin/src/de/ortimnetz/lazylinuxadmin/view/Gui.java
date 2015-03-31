@@ -2,19 +2,19 @@ package de.ortimnetz.lazylinuxadmin.view;
 
 
 import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Image;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.ImageObserver;
-import java.awt.image.ImageProducer;
 
-import javax.swing.JFileChooser;
+
+
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JTable;
+
+
+import de.ortimnetz.lazylinuxadmin.controller.Controller;
 
 
 public class Gui extends JFrame {
@@ -27,12 +27,9 @@ public class Gui extends JFrame {
 	private JMenuItem menuItemConfig;
 	private JMenuItem menuItemExit;
 	private JMenuItem menuItemVersion;
-	private JTable table;
 	
 	private Gui(){
-		
-		table = new JTable(1, 10);
-		
+				
 		menubar = new JMenuBar();
 		menuFile = new JMenu("File");
 		menuHelp = new JMenu("Help");
@@ -54,7 +51,6 @@ public class Gui extends JFrame {
 		
 
 		this.setJMenuBar(menubar);
-		this.add(table);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH); 
 		this.setTitle("Lazy Linux Admin - Server Management Tool");
@@ -77,6 +73,8 @@ public class Gui extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
+				Controller.getInstance().loadConfig();
+				
 				GuiConfig config = new GuiConfig();
 				
 			}
@@ -95,7 +93,7 @@ public class Gui extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
+				Controller.getInstance().start();
 				
 			}
 		});

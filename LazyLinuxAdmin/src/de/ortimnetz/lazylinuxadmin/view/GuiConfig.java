@@ -1,24 +1,29 @@
 package de.ortimnetz.lazylinuxadmin.view;
 
 import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.security.auth.login.AppConfigurationEntry;
+
+
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
-import javax.swing.border.Border;
 
+
+
+import de.ortimnetz.lazylinuxadmin.controller.Controller;
 import de.ortimnetz.lazylinuxadmin.model.Config;
 
 
 public class GuiConfig extends JFrame {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JTextField txtUser;
 	private JTextField txtKeyFile;
 	private JTextField txtHostFile;
@@ -40,7 +45,7 @@ public class GuiConfig extends JFrame {
 		getContentPane().add(lblUser);
 		
 		txtUser = new JTextField();
-		txtUser.setText("");
+		txtUser.setText(config.getUser());
 		txtUser.setBounds(101, 8, 120, 20);
 		getContentPane().add(txtUser);
 		txtUser.setColumns(10);
@@ -54,7 +59,7 @@ public class GuiConfig extends JFrame {
 		getContentPane().add(lblKeyFile);
 		
 		txtKeyFile = new JTextField();
-		txtKeyFile.setText("");
+		txtKeyFile.setText(config.getKeyfile());
 		txtKeyFile.setBounds(101, 83, 120, 20);
 		getContentPane().add(txtKeyFile);
 		txtKeyFile.setColumns(10);
@@ -64,7 +69,7 @@ public class GuiConfig extends JFrame {
 		getContentPane().add(lblHostFile);
 		
 		txtHostFile = new JTextField();
-		txtHostFile.setText("");
+		txtHostFile.setText(config.getHostsfile());
 		txtHostFile.setBounds(101, 133, 120, 20);
 		getContentPane().add(txtHostFile);
 		txtHostFile.setColumns(10);
@@ -74,12 +79,12 @@ public class GuiConfig extends JFrame {
 		getContentPane().add(lblKeyPassword);
 		
 		pwdPassword = new JPasswordField();
-		pwdPassword.setText("");
+		pwdPassword.setText(config.getPass());
 		pwdPassword.setBounds(101, 58, 120, 20);
 		getContentPane().add(pwdPassword);
 		
 		pwdKeyPassword = new JPasswordField();
-		pwdKeyPassword.setText("");
+		pwdKeyPassword.setText(config.getKeypass());
 		pwdKeyPassword.setBounds(101, 108, 120, 20);
 		getContentPane().add(pwdKeyPassword);
 		
@@ -96,7 +101,7 @@ public class GuiConfig extends JFrame {
 		getContentPane().add(lblPort);
 		
 		txtPort = new JTextField();
-		txtPort.setText("22");
+		txtPort.setText(""+config.getPort());
 		txtPort.setBounds(101, 33, 120, 20);
 		getContentPane().add(txtPort);
 		txtPort.setColumns(10);
@@ -195,8 +200,7 @@ public class GuiConfig extends JFrame {
 				
 
 					Config.setInstance(config);
-					System.out.println("Config file has been written.");
-			
+					Controller.getInstance().saveConfig();
 
 				
 			}
