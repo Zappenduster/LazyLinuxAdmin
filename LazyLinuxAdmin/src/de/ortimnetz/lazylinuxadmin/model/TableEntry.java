@@ -9,6 +9,9 @@ public class TableEntry {
 	
 	public TableEntry(String hostname){
 		this.hostname = hostname;
+		update = false;
+		upgrade = false;
+		distUpgrade = false;
 	}
 
 	public String getHostname() {

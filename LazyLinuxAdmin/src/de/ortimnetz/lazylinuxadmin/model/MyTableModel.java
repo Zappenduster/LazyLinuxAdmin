@@ -2,6 +2,7 @@ package de.ortimnetz.lazylinuxadmin.model;
 
 import java.util.Vector;
 
+import javax.swing.JTextField;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
 
@@ -10,7 +11,7 @@ public class MyTableModel extends DefaultTableModel {
 	private String[] columNames;
 	
 	public MyTableModel() {
-		super(1, 4);
+		super(0, 4);
 		columNames = new String[4];
 		columNames[0]="Hostname";
 		columNames[1]="apt-get update";
@@ -20,17 +21,32 @@ public class MyTableModel extends DefaultTableModel {
 	
 @Override
 public String getColumnName(int column) {
-	// TODO Auto-generated method stub
 	return columNames[column];
 }
 
 
+
  	public void addRow(TableEntry tableEntry){
- 		Vector<String> rowData = new Vector<>();
- 		rowData.add(tableEntry.getHostname());
- 		rowData.add(String.valueOf(tableEntry.isUpdate()));
- 		rowData.add(String.valueOf(tableEntry.isUpgrade()));
- 		rowData.add(String.valueOf(tableEntry.isDistUpgrade()));
+ 		Vector<JTextField> rowData = new Vector<>();
+ 		rowData.add(new JTextField(tableEntry.getHostname()));
+ 		rowData.add(new JTextField(String.valueOf(tableEntry.isUpdate())));
+ 		rowData.add(new JTextField(String.valueOf(tableEntry.isUpgrade())));
+ 		rowData.add(new JTextField(String.valueOf(tableEntry.isDistUpgrade())));
+
  		addRow(rowData);
+ 		
+ 	}
+ 	
+ 	
+ 	@Override
+ 	public Object getValueAt(int row, int column) {
+ 
+ 		if ( super.getValueAt(row, column) instanceof JTextField) {
+ 			JTextField tf = (JTextField) super.getValueAt(row, column) ;
+ 			return tf.getText();
+ 					
+		}else{
+			return super.getValueAt(row, column);
+		}
  	}
 }

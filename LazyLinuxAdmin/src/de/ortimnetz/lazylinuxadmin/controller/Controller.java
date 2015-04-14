@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Observable;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.jcraft.jsch.JSch;
@@ -17,26 +18,36 @@ import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 
 import de.ortimnetz.lazylinuxadmin.command.Command;
+import de.ortimnetz.lazylinuxadmin.command.CommandDisconnect;
 import de.ortimnetz.lazylinuxadmin.command.CommandDistUpgrade;
 import de.ortimnetz.lazylinuxadmin.command.CommandUpdate;
 import de.ortimnetz.lazylinuxadmin.command.CommandUpgrade;
 import de.ortimnetz.lazylinuxadmin.model.Config;
 import de.ortimnetz.lazylinuxadmin.model.Host;
+import de.ortimnetz.lazylinuxadmin.model.TableData;
+import de.ortimnetz.lazylinuxadmin.model.TableEntry;
 import de.ortimnetz.lazylinuxadmin.view.Gui;
 
 
 
-public class Controller {
+public class Controller extends Observable {
 
 	private static Controller instance;
 	private CopyOnWriteArrayList<Host> hosts;
 	private Config config;
+	private TableData tableData;
+	private Gui mygui;
+	private int progressMax;
 
 		
 	private Controller(){
-		Gui.getInstance();
+		mygui = Gui.getInstance();
+		
+		
 		hosts = new CopyOnWriteArrayList<Host>();
 		loadConfig();
+		tableData = new TableData();
+		tableData.addObserver(Gui.getInstance());
 		
 	}
 	
@@ -59,6 +70,7 @@ public class Controller {
 				
 				Host host = new Host(hostname);
 				hosts.add(host);
+
 			
 			}
 			
@@ -84,7 +96,13 @@ public class Controller {
 				host.setSession(session);
 
 			} catch (JSchException e) {
+				if(!host.getName().equals("")){
 				System.out.println(host.getName() + ": Verbindung konnte nicht aufgebaut werden.");
+				TableEntry tableEntry = new TableEntry(host.getName());
+				tableData.add(tableEntry);
+				}
+
+				hosts.remove(host);
 			}
 
 		}	
@@ -99,10 +117,11 @@ public class Controller {
 			public void run() {
 				try {
 					config = Config.getInstance();
+					
 					createHosts();
 					createSessions();
-
 					startCommands();
+					
 				} catch (NullPointerException e) {
 					System.out.println("Configuration is not valid.");
 				}
@@ -196,26 +215,67 @@ public class Controller {
 					ArrayList<Command> commands = host.getCommands();
 					Session session = host.getSession();
 					
+					TableEntry tableEntry = new TableEntry(host.getName());
+					
+
+					
 					Command update = new CommandUpdate(session);
 					commands.add(update);
 					Command upgrade = new CommandUpgrade(session);
 					commands.add(upgrade);
 					Command distUpgrade = new CommandDistUpgrade(session);
 					commands.add(distUpgrade);
-					
+					Command disconnect = new CommandDisconnect(session);
+					commands.add(disconnect);
+					System.out.println(hosts.size()*commands.size());
+					setProgressMax(hosts.size()*commands.size());
 					for(Command command : commands){
 						command.execute();
-						if(!command.isSuccessful()){
-							System.out.println("Error");
+						setChanged();
+						notifyObservers();
+						System.out.println("Notify");
+						if(command.isSuccessful()){
+							if(command instanceof CommandUpdate){
+								tableEntry.setUpdate(true);
+								System.out.println("update erfolgreich");
+							} else if (command instanceof CommandUpgrade) {
+								tableEntry.setUpgrade(true);
+								System.out.println("upgrade erfolgreich");
+							} else if (command instanceof CommandDistUpgrade) {
+								tableEntry.setDistUpgrade(true);
+								System.out.println("dist-upgrade erfolgreich");
+							}
+							
 						}
+							
+						
 					}
-					
+					tableData.add(tableEntry);
 				}
 			});
 			
 			thread.start();
 			
 		}
+	}
+
+	public void setProgressMax(int max){
+		this.progressMax=max;
+	}
+	
+	public void addEntryTest() {
+		
+		TableEntry tableEntry = new TableEntry("test-gw");
+		tableData.add(tableEntry);
+	
+	}
+
+	public TableData getTableData() {
+		return tableData;
+	}
+
+	public int getProgressMax() {
+		return progressMax;
 	}
 	
 //	private void paintTable(){

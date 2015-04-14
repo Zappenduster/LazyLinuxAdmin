@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.jcraft.jsch.Session;
 
 import de.ortimnetz.lazylinuxadmin.command.Command;
+import de.ortimnetz.lazylinuxadmin.controller.Controller;
 
 public class Host {
 
@@ -16,6 +17,7 @@ public class Host {
 		this.name = name;
 		this.session = null;
 		commands = new ArrayList<Command>();
+		
 	}
 
 	public String getName() {
