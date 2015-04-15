@@ -6,12 +6,18 @@ public class TableEntry {
 	private boolean update;
 	private boolean upgrade;
 	private boolean distUpgrade;
+	private boolean autoremove;
+	private String dfH;
+	private String reboot;
 	
 	public TableEntry(String hostname){
 		this.hostname = hostname;
 		update = false;
 		upgrade = false;
 		distUpgrade = false;
+		dfH = "";
+		autoremove = false;
+		reboot = "";
 	}
 
 	public String getHostname() {
@@ -45,6 +51,32 @@ public class TableEntry {
 	public void setDistUpgrade(boolean distUpgrade) {
 		this.distUpgrade = distUpgrade;
 	}
+
+	public String getDfH() {
+		return dfH;
+	}
+
+	public void setDfH(String dfH) {
+		this.dfH = dfH;
+	}
+
+	public boolean isAutoremove() {
+		return autoremove;
+	}
+
+	public void setAutoremove(boolean autoremove) {
+		this.autoremove = autoremove;
+	}
+
+	public String getReboot() {
+		return reboot;
+	}
+
+	public void setReboot(String reboot) {
+		this.reboot = reboot;
+	}
+
+	
 	
 	
 	

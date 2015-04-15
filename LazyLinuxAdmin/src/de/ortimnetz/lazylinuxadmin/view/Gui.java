@@ -63,6 +63,9 @@ public class Gui extends JFrame implements Observer{
 		table.getColumnModel().getColumn(1).setCellRenderer(cellRenderer);
 		table.getColumnModel().getColumn(2).setCellRenderer(cellRenderer);
 		table.getColumnModel().getColumn(3).setCellRenderer(cellRenderer);
+		table.getColumnModel().getColumn(4).setCellRenderer(cellRenderer);
+		table.getColumnModel().getColumn(5).setCellRenderer(cellRenderer);
+		table.getColumnModel().getColumn(6).setCellRenderer(cellRenderer);
 		tablepanel = new JScrollPane(table);
 		this.add(tablepanel);
 		
@@ -90,7 +93,7 @@ public class Gui extends JFrame implements Observer{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Controller.getInstance().addEntryTest();
+				
 				
 			}
 		});

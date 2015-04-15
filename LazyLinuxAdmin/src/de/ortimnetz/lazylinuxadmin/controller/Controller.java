@@ -18,8 +18,11 @@ import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 
 import de.ortimnetz.lazylinuxadmin.command.Command;
+import de.ortimnetz.lazylinuxadmin.command.CommandAutoRemove;
+import de.ortimnetz.lazylinuxadmin.command.CommandDfH;
 import de.ortimnetz.lazylinuxadmin.command.CommandDisconnect;
 import de.ortimnetz.lazylinuxadmin.command.CommandDistUpgrade;
+import de.ortimnetz.lazylinuxadmin.command.CommandReboot;
 import de.ortimnetz.lazylinuxadmin.command.CommandUpdate;
 import de.ortimnetz.lazylinuxadmin.command.CommandUpgrade;
 import de.ortimnetz.lazylinuxadmin.model.Config;
@@ -225,6 +228,12 @@ public class Controller extends Observable {
 					commands.add(upgrade);
 					Command distUpgrade = new CommandDistUpgrade(session);
 					commands.add(distUpgrade);
+					Command autoRemove = new CommandAutoRemove(session);
+					commands.add(autoRemove);
+					Command dfh = new CommandDfH(session);
+					commands.add(dfh);
+					Command reboot = new CommandReboot(session);
+					commands.add(reboot);
 					Command disconnect = new CommandDisconnect(session);
 					commands.add(disconnect);
 					System.out.println(hosts.size()*commands.size());
@@ -237,13 +246,16 @@ public class Controller extends Observable {
 						if(command.isSuccessful()){
 							if(command instanceof CommandUpdate){
 								tableEntry.setUpdate(true);
-								System.out.println("update erfolgreich");
 							} else if (command instanceof CommandUpgrade) {
 								tableEntry.setUpgrade(true);
-								System.out.println("upgrade erfolgreich");
 							} else if (command instanceof CommandDistUpgrade) {
 								tableEntry.setDistUpgrade(true);
-								System.out.println("dist-upgrade erfolgreich");
+							} else if (command instanceof CommandDfH) {
+								tableEntry.setDfH(((CommandDfH) command).getOutput());
+							} else if (command instanceof CommandAutoRemove) {
+								tableEntry.setAutoremove(true);
+							} else if (command instanceof CommandReboot) {
+								tableEntry.setReboot(((CommandReboot) command).getOutput());
 							}
 							
 						}
@@ -263,12 +275,7 @@ public class Controller extends Observable {
 		this.progressMax=max;
 	}
 	
-	public void addEntryTest() {
-		
-		TableEntry tableEntry = new TableEntry("test-gw");
-		tableData.add(tableEntry);
-	
-	}
+
 
 	public TableData getTableData() {
 		return tableData;

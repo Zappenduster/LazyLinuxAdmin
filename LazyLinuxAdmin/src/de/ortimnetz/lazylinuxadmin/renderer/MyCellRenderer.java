@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Component;
 
 import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.table.DefaultTableCellRenderer;
 
 import de.ortimnetz.lazylinuxadmin.model.MyTableModel;
@@ -32,7 +31,7 @@ public class MyCellRenderer extends DefaultTableCellRenderer{
 //		}
 		
 		if (dm.getValueAt(arg4, arg5) instanceof String) {
-			if (cellValue.equals("false")) {
+			if (cellValue.equals("false") || cellValue.equals("")) {
 				cell.setBackground(Color.RED);
 			} else {
 				cell.setBackground(Color.WHITE);
