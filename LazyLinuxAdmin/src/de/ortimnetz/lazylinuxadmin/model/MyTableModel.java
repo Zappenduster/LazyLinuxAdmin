@@ -12,6 +12,7 @@ public class MyTableModel extends DefaultTableModel {
 	
 	public MyTableModel() {
 		super(0, 7);
+		
 		columNames = new String[7];
 		columNames[0]="Hostname";
 		columNames[1]="apt-get update";
@@ -42,7 +43,10 @@ public String getColumnName(int column) {
  		
  	}
  	
- 	
+ 	@Override
+ 	public boolean isCellEditable(int row, int column) {
+ 		return false;
+ 	}
  	@Override
  	public Object getValueAt(int row, int column) {
  

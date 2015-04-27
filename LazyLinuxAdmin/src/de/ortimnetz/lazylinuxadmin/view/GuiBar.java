@@ -26,7 +26,7 @@ public class GuiBar extends JDialog implements Observer{
 	this.add(BorderLayout.CENTER,bar);
 	this.add(BorderLayout.NORTH, new Label("Progress ..."));
 	this.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
-	bar.setPreferredSize(new Dimension(400,100));
+	bar.setPreferredSize(new Dimension(400,50));
 	
 	this.pack();
 	bar.setStringPainted(true);

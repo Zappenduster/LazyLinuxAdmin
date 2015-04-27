@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Enumeration;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -17,6 +18,7 @@ import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
+import javax.swing.table.TableColumn;
 
 import de.ortimnetz.lazylinuxadmin.controller.Controller;
 import de.ortimnetz.lazylinuxadmin.model.MyTableModel;
@@ -59,6 +61,7 @@ public class Gui extends JFrame implements Observer{
 		dm=new MyTableModel();
 		cellRenderer = new MyCellRenderer(dm);
 		table = new JTable(dm);
+		
 		table.getColumnModel().getColumn(0).setCellRenderer(cellRenderer);
 		table.getColumnModel().getColumn(1).setCellRenderer(cellRenderer);
 		table.getColumnModel().getColumn(2).setCellRenderer(cellRenderer);
@@ -66,6 +69,9 @@ public class Gui extends JFrame implements Observer{
 		table.getColumnModel().getColumn(4).setCellRenderer(cellRenderer);
 		table.getColumnModel().getColumn(5).setCellRenderer(cellRenderer);
 		table.getColumnModel().getColumn(6).setCellRenderer(cellRenderer);
+		
+	
+		
 		tablepanel = new JScrollPane(table);
 		this.add(tablepanel);
 		

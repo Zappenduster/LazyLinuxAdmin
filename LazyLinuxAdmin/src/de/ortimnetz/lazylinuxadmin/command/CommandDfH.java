@@ -16,7 +16,7 @@ public class CommandDfH extends Command {
 		super.session = session;
 		super.command = "df -h";
 		inputLines = new ArrayList<String>();
-		output = " - ";
+		output = "";
 	}
 	
 	@Override
@@ -48,7 +48,7 @@ public class CommandDfH extends Command {
 			if(line.startsWith("/dev/sd") || line.startsWith("/dev/vd") || line.startsWith("/dev/md")){
 				// Split the line into several Strings, take the important info and merge into one giant String
 				String[] split = line.split("\\s+");
-				output += split[0] + ": " + split[4] + " - ";
+				output += split[0] + ": " + split[4] + " ";
 				
 				Integer i = Integer.valueOf(split[4].replace("%", ""));
 				System.out.println("i"+i);
